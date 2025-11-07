@@ -1,85 +1,72 @@
-End-to-End Customer Churn Prediction 🚀
+# 📊 End-to-End Telecom Customer Churn Prediction 🚀
 
-This project is a complete end-to-end data science workflow, predicting telecom customer churn from a raw CSV to a deployed, interactive web application.
+This project is a complete **end-to-end data science workflow** that predicts telecom customer churn — starting from raw CSV data and ending with a **fully deployed interactive web app**.
 
-Live Demo
+🔗 **Live Demo:**  
+The final model is deployed using **Streamlit Cloud**.  
+👉 [https://iavinashpathak-customer-churn-prediction-app-streamlit-bu0v0t.streamlit.app/]
 
-The final model is deployed on Streamlit Cloud.
+<img width="1901" height="726" alt="Screenshot 2025-11-07 115547" src="https://github.com/user-attachments/assets/73076fc0-23ce-4ead-ac38-dd2edd04c3f8" />
 
-➡️ Try the live Customer Churn Predictor!
 
-(This is a placeholder GIF - you should record your own!)
+---
 
-⚙️ Project Workflow
+## ⚙️ Project Workflow
 
-The entire process followed the standard machine learning lifecycle:
+The project follows the **standard machine learning lifecycle**:
 
-1. Data Cleaning & EDA (Jupyter Notebook)
+### 1️⃣ Data Cleaning & Exploratory Data Analysis (EDA)
+- Dataset used: `WA_Fn-UseC_-Telco-Customer-Churn.csv`
+- Fixed incorrect data types (e.g., `TotalCharges` was stored as object instead of float).
+- Standardized inconsistent categorical values (e.g., replaced `"No internet service"` with `"No"`).
+- Explored relationships between features and target variable: **Churn**.
 
-Loaded the WA_Fn-UseC_-Telco-Customer-Churn.csv dataset.
+### 2️⃣ Preprocessing & Feature Engineering
+Built a complete **Scikit-learn pipeline** using `ColumnTransformer`:
 
-Handled problematic data types (e.g., TotalCharges was an object type).
+| Feature Type | Transformations Applied |
+|--------------|--------------------------|
+| Numeric (`tenure`, `MonthlyCharges`, `TotalCharges`) | Missing value imputation + StandardScaler |
+| Categorical (all others) | OneHotEncoding |
 
-Corrected categorical values (e.g., mapping 'No internet service' to 'No').
+➡️ Result: A single automated preprocessing flow for both training & inference ✅
 
-Analyzed feature relationships with the target variable (Churn).
+### 3️⃣ Model Training & Tuning
+Models tested:
+| Model | Notes |
+|--------|-------|
+| Logistic Regression | Baseline model |
+| Decision Tree / Random Forest | High overfitting (99% train vs ~75% test accuracy) |
+| ✅ **XGBoost (Final)** | Best performance & generalization |
 
-2. Preprocessing & Feature Engineering
+🔍 **Hyperparameter Tuning**  
+Performed using `GridSearchCV` on:
+- `max_depth`
+- `learning_rate`
+- `n_estimators`
 
-Built a robust ColumnTransformer to create a single preprocessing pipeline.
+📌 **Final Model:**  
+Trained and saved using Joblib as:  
+`churn_predictor_pipeline.joblib`
 
-Numeric Features (tenure, MonthlyCharges, TotalCharges): Imputed missing values (NaNs) with SimpleImputer and scaled with StandardScaler.
+### 4️⃣ Deployment
+| Component | Description |
+|-----------|-------------|
+| Backend | `predictor.py` loads the saved model & exposes prediction function |
+| Frontend | `app_streamlit.py` – Streamlit UI to take user input |
+| Hosting | Streamlit Cloud connected directly to GitHub repo |
 
-Categorical Features: Encoded all categorical data using OneHotEncoder.
+---
 
-3. Model Training & Tuning
+## 🛠️ How to Run Locally
 
-Established a baseline with LogisticRegression.
-
-Trained DecisionTree and RandomForest models, identifying clear overfitting (99% train score vs. ~75% test score).
-
-Best Model (XGBoost): Trained an XGBClassifier which provided the best balance of performance and generalization.
-
-Hyperparameter Tuning: Used GridSearchCV to find the optimal hyperparameters for the XGBoost model, focusing on max_depth, learning_rate, and n_estimators to reduce overfitting.
-
-Final Model: The best-tuned XGBoost model pipeline (preprocessor + model) was saved as churn_predictor_pipeline.joblib.
-
-4. Deployment
-
-Backend (predictor.py): A simple Python script that loads the .joblib pipeline and contains a single function to predict new data.
-
-Frontend (app_streamlit.py): An interactive web app built with Streamlit. It provides a user-friendly form to input customer data.
-
-Cloud (Streamlit Cloud): The app is connected to this GitHub repo and deployed on Streamlit's free cloud platform.
-
-🔧 How to Run Locally
-
-Clone this repository:
-
-git clone [https://github.com/iavinashpathak/Customer-Churn-Prediction.git](https://github.com/iavinashpathak/Customer-Churn-Prediction.git)
+```bash
+# 1. Clone the repo
+git clone https://github.com/iavinashpathak/Customer-Churn-Prediction.git
 cd Customer-Churn-Prediction
 
-
-Install the required libraries:
-
+# 2. Install dependencies
 pip install -r requirements.txt
 
-
-Run the Streamlit app:
-
+# 3. Run the Streamlit app
 streamlit run app_streamlit.py
-
-
-Your browser will automatically open to the app.
-
-Technologies Used
-
-Data Analysis: Pandas, NumPy, Matplotlib, Seaborn
-
-ML Pipeline: Scikit-learn (Pipeline, ColumnTransformer, GridSearchCV)
-
-Modeling: XGBoost, Scikit-learn (LogisticRegression, RandomForestClassifier)
-
-Deployment: Streamlit
-
-Model Serving: Joblib
